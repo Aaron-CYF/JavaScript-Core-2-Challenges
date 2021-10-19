@@ -1,22 +1,19 @@
 let tweetBtn = document.getElementById("tweetBtn");
 tweetBtn.addEventListener("click", submitTweet);
 let tweetBody = document.getElementById("tweetBody");
+let counter = document.getElementById("counter");
 // tweetBody.addEventListener("keyup", );
 var count = 0;
-tweetBody.onkeydown = () => {
+tweetBody.oninput = () => {
   count = tweetBody.value.length;
-  console.log(count);
   counter.innerText = count + ` characters`;
+
   if (count > 280) {
     counter.style.color = "red";
   } else {
-    counter.style.color = "black";
+    counter.style.color = "";
   }
 };
-let counter = document.getElementById("counter");
-
-console.log(count);
-console.log(tweetBody.value.length);
 
 function submitTweet() {
   let container = document.createElement("div");
@@ -29,18 +26,12 @@ function submitTweet() {
     tweetPara.innerHTML = tweetBody.value;
     let checkText = tweetPara.innerHTML;
 
-    console.log(checkText.includes("@"));
-    console.log(checkText.indexOf("@"));
-    console.log(checkText.split(" "));
-    console.log(
-      checkText.slice(checkText.indexOf("@"), checkText.indexOf(" "))
-    );
+    let reg = /[^a-zA-Z0-9]+/;
+
     let tweetArr = checkText.split(" ");
     for (var i in tweetArr) {
-      if (tweetArr[i].charAt(0) === "@" && tweetArr[i].length > 1) {
-        tweetArr[i] = `<a href="www.twitter.com/${tweetArr[i].slice(1)}">${
-          tweetArr[i]
-        }</a>`;
+      if (tweetArr[i].charAt(0) === "@" && tweetArr[i].length > 1 && !reg.test(tweetArr[i].slice(1))) {
+        tweetArr[i] = `<a href="www.twitter.com/${tweetArr[i].slice(1)}">${tweetArr[i]}</a>`;
       }
     }
     tweetPara.innerHTML = tweetArr.join(" ");
